@@ -20,4 +20,28 @@ public class StudyProgramme {
 //            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 //    @JsonBackReference
     private Collection<Course> courses;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Collection<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Collection<Course> courses) {
+        this.courses = courses;
+    }
 }

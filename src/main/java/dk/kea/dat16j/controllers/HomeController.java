@@ -1,8 +1,9 @@
 package dk.kea.dat16j.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,18 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class HomeController {
 
+    public static final Logger LOG = LoggerFactory.getLogger(HomeController.class);
+
     @GetMapping(path = {"/", "/home"})
     public ModelAndView homePage(HttpServletRequest request) {
         if (request.getUserPrincipal() == null) { // the user is not logged in
+            LOG.debug("Guest has connected.");
             return new ModelAndView("homepage/home-not-signed-in");
         } else {
             return new ModelAndView("homepage/home-signed-in");
         }
-    }
-
-    @GetMapping(path = "/testLogin")
-    @ResponseBody
-    public String testing() {
-        return "<h1>If you end up here, then login system has worked</h1>";
     }
 }
