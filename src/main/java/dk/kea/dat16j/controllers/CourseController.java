@@ -10,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -114,9 +111,22 @@ public class CourseController {
 
         Collection<StudyProgramme> studyProgrammesObj = studyProgrammeRepository.findAllByNameIn(Arrays.asList(studyProgrammes)); // study programmes will not be be created here
         for (StudyProgramme programme : studyProgrammesObj) {
-            programme.getCourses().add(course);
+            programme.getCourses().add(course); // TODO: 17-Nov-17 Check if the study programme already has the course attached (when editing a course) 
             studyProgrammeRepository.save(studyProgrammesObj);
         }
         return new ModelAndView(new RedirectView("/courses/all"));
+    }
+
+    @GetMapping(path = "/{id}/edit") // TODO: 16-Nov-17 Change to a POST, to not show data
+    public ModelAndView getCourseEditPage(@PathVariable(name = "id") long id) {
+        Course course = courseRepository.findOne(id);
+        // TODO: 16-Nov-17 Check for null, or open page 404
+
+        ModelAndView mv = new ModelAndView("edit-course");
+        mv.getModel().put("course", course);
+        mv.getModel().put("teachersList", teacherRepository.findAll());
+        mv.getModel().put("studyProgrammes", studyProgrammeRepository.findAll());
+
+        return mv;
     }
 }

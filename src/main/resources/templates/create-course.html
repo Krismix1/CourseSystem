@@ -38,9 +38,6 @@
             </div>
             <div class="custom-controls">
                 <label>Study Programme</label><br/>
-                <!--<input type="text" class="form-control" id="studyProgramme" name="studyProgramme"-->
-                <!--placeholder="Choose study programme"-->
-                <!--value="Computer Science" required="true"/>-->
                 <label class="custom-control custom-checkbox" th:unless="!studyProgrammes.empty"
                        th:each="programme : ${studyProgrammes}">
                     <input type="checkbox" class="custom-control-input" th:id="'studyProgramme'+${programme.id}"
@@ -115,14 +112,13 @@
             </div>
             <div class="custom-controls">
                 <label>Teachers</label><br/>
-                <!--<input type="text" class="form-control" id="teachers" name="teachers"-->
-                       <!--placeholder="Enter teachers" required="true"/>-->
                 <label class="custom-control custom-checkbox" th:unless="!teachersList.empty"
                        th:each="teacher : ${teachersList}">
                     <input type="checkbox" class="custom-control-input" th:id="'teacher'+${teacher.id}"
                            name="teachers" th:value="${teacher.id}"/>
                     <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description" th:text="${teacher.firstName + ' ' + teacher.lastName}">Here will be the list of teachers...</span>
+                    <span class="custom-control-description"
+                          th:text="${teacher.firstName + ' ' + teacher.lastName + ' (' + teacher.account?.email+')'}">Here will be the list of teachers...</span>
                 </label>
             </div>
             <br/>
