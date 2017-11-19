@@ -1,6 +1,7 @@
 package dk.kea.dat16j.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -15,8 +16,8 @@ public class Student {
     private String lastName;
     @ManyToMany
     private Collection<Course> attendingCourses; // this will store courses that the student is already attending
-    @ManyToMany
-    private Collection<Course> signedUpCourses; // this will store courses where the student is waiting for approval
+    @OneToMany
+    private Collection<CourseRequest> signedUpCourses; // this will store courses where the student is waiting for approval
     @OneToOne
 //    @Column(unique = true, nullable = false) // hibernate exception
     private Account account;
@@ -55,11 +56,11 @@ public class Student {
         this.attendingCourses = attendingCourses;
     }
 
-    public Collection<Course> getSignedUpCourses() {
+    public Collection<CourseRequest> getSignedUpCourses() {
         return signedUpCourses;
     }
 
-    public void setSignedUpCourses(Collection<Course> signedUpCourses) {
+    public void setSignedUpCourses(Collection<CourseRequest> signedUpCourses) {
         this.signedUpCourses = signedUpCourses;
     }
 
@@ -69,5 +70,17 @@ public class Student {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public boolean addCourseSignUp(Course course) {
+        if (signedUpCourses == null) {
+            signedUpCourses = new ArrayList<>(1);
+        }
+        if (signedUpCourses.stream().noneMatch(c -> c.getId() == course.getId())) {
+            CourseRequest courseRequest = new CourseRequest();
+            courseRequest.setCourse(course);
+            return signedUpCourses.add(courseRequest);
+        }
+        return true;
     }
 }
