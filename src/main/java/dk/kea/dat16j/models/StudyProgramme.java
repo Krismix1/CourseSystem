@@ -44,4 +44,14 @@ public class StudyProgramme {
     public void setCourses(Collection<Course> courses) {
         this.courses = courses;
     }
+
+    public boolean hasCourse(Course course) {
+        return courses
+                .stream()
+                .anyMatch(c -> c.getId() == course.getId());
+    }
+
+    public boolean removeCourseIfContains(long courseId) {
+        return courses.removeIf(c -> c.getId() == courseId);
+    }
 }

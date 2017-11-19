@@ -12,4 +12,6 @@ public interface StudyProgrammeRepository extends CrudRepository<StudyProgramme,
     StudyProgramme findByName(String name);
 
     Collection<StudyProgramme> findAllByNameIn(Collection<String> names);
+
+    Collection<StudyProgramme> findAllByNameNotIn(Collection<String> names);
 }

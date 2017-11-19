@@ -151,4 +151,10 @@ public class Course {
     public void setTeachers(Collection<Teacher> teachers) {
         this.teachers = teachers;
     }
+
+    public boolean hasTeacher(Teacher teacher) {
+        return teachers
+                .stream()
+                .anyMatch(t -> t.getId() == teacher.getId()); // TODO: 17-Nov-17 Add also check for emails being the same
+    }
 }
