@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit course</title>
+
+    <!--Import Bootstrap-->
+    <meta name="viewport" learningContent="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+            integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+</head>
+<body>
+<div>This will be replaced by navbar fragment...</div>
+<br/>
+
+<div class="container">
+    <h1>Edit</h1>
+
+    <form th:object="${course}" action="#" th:action="@{/courses/} + ${course.id} + '/submit-edit/'" method="post">
+        <div class="form-group">
+            <div>
+                <label>Name of course in Danish</label>
+                <input type="text" class="form-control" id="danishName" name="danishName"
+                       placeholder="Enter course name in Danish"
+                       required="true" th:value="${course.danishName}"/>
+            </div>
+            <div>
+                <label>Name of course in English</label>
+                <input type="text" class="form-control" id="englishName" name="englishName"
+                       placeholder="Enter course name in English"
+                       required="true" th:value="${course.englishName}"/>
+            </div>
+            <div class="custom-controls">
+                <label>Study Programme</label><br/>
+                <label class="custom-control custom-checkbox" th:unless="!studyProgrammes.empty"
+                       th:each="programme : ${studyProgrammes}">
+                    <input type="checkbox" class="custom-control-input" th:id="'studyProgramme'+${programme.id}"
+                           name="studyProgrammes" th:value="${programme.name}" th:checked="${programme.hasCourse(course)}"/>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description" th:text="${programme.name}">Here will be the list of study programmes...</span>
+                </label>
+            </div>
+            <div class="custom-controls-stacked">
+                <label>Is the course mandatory or elective?</label>
+                <label class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" id="mandatory" name="mandatory" value="mandatory"
+                           required="true" th:checked="${course.mandatory}"/>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Mandatory</span>
+                </label>
+                <label class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" id="elective" name="mandatory" value="elective"
+                           required="true" th:checked="!${course.mandatory}"/>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Elective</span>
+                </label>
+            </div>
+            <div>
+                <label>ECTS</label>
+                <input type="number" class="form-control" id="ects" name="ects"
+                       placeholder="Enter ECTS" required="true" min="1" th:value="${course.ects}"/>
+            </div>
+            <div>
+                <label>Course Language</label>
+                <input type="text" class="form-control" id="courseLanguage" name="courseLanguage"
+                       placeholder="Enter course language" required="true" th:value="${course.courseLanguage}"/>
+            </div>
+            <div>
+                <label>Minimum number of students</label>
+                <input type="number" class="form-control" id="minStudents" name="minStudents"
+                       placeholder="Enter minimum number of students" required="true" min="1" th:value="${course.minimumNumberOfStudent}"/>
+            </div>
+            <div>
+                <label>Expected number of students</label>
+                <input type="number" class="form-control" id="expectedStudents" name="expectedStudents"
+                       placeholder="Enter expected number of students" required="true" min="0" th:value="${course.expectedNumberOfStudent}"/>
+            </div>
+            <div>
+                <label>Maximum number of students</label>
+                <input type="number" class="form-control" id="maxStudents" name="maxStudents"
+                       placeholder="Enter maximum number of students" required="true" th:value="${course.maximumNumberOfStudent}"/>
+            </div>
+            <div>
+                <label>Prerequisites</label>
+                <input type="text" class="form-control" id="prerequisites" name="prerequisites"
+                       placeholder="Enter prerequisites" value="Students must know" required="true" th:value="${course.prerequisites}"/>
+            </div>
+            <div>
+                <label>Learning outcome</label>
+                <input type="text" class="form-control" id="learningOutcome" name="learningOutcome"
+                       value="Students will be able to" required="true" th:value="${course.learningOutcome}"/>
+            </div>
+            <div>
+                <label>Content</label>
+                <input type="text" class="form-control" id="learningContent" name="learningContent"
+                       placeholder="Enter learning content of course" required="true" th:value="${course.learningContent}"/>
+            </div>
+            <div>
+                <label>Learning activities</label>
+                <input type="text" class="form-control" id="learningActivities" name="learningActivities"
+                       required="true" th:value="${course.learningActivities}"/>
+            </div>
+            <div>
+                <label>Exam form</label>
+                <input type="text" class="form-control" id="examForm" name="examForm" required="true" th:value="${course.examForm}"/>
+            </div>
+            <div class="custom-controls">
+                <label>Teachers</label><br/>
+                <label class="custom-control custom-checkbox" th:unless="!teachersList.empty"
+                       th:each="teacher : ${teachersList}">
+                    <input type="checkbox" class="custom-control-input" th:id="'teacher'+${teacher.id}"
+                           name="teachers" th:value="${teacher.id}" th:checked="${course.hasTeacher(teacher)}"/>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description" th:text="${teacher.firstName + ' ' + teacher.lastName}">Here will be the list of teachers...</span>
+                </label>
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-dark">Save course</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
