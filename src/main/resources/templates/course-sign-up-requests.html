@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Courses sign up requests</title>
+
+    <meta name="viewport" learningContent="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+            integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+</head>
+<body>
+<div>Here will be the nav bar fragment ...</div>
+<div class="container">
+    <h1 th:object="${course}" th:text="'Request for ' + ${course?.englishName}">Here will be the name of the course</h1>
+    <div class="custom-controls-stacked">
+        <label class="custom-control" th:unless="!requestsList.empty"
+               th:each="student : ${studentsList}">
+            <span class="custom-control-description"
+                  th:text="${student.firstName} + ' ' + ${student.lastName}">Here will be the list of students who signed up for this course...</span>
+        </label>
+    </div>
+</div>
+</body>
+</html>

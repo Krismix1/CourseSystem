@@ -69,12 +69,25 @@ public class StudentController {
     }
 
     @GetMapping("/courses/signed-up/all")
-    @ResponseBody
+    @ResponseBody // to allow students to see their requests
     public Collection<CourseRequest> getAllSignUpRequest(@RequestParam String firstName,
                                                          @RequestParam String lastName) {
         ModelAndView mv = new ModelAndView();
 
         final Student student = studentRepository.findByFirstNameAndLastName(firstName, lastName);
         return student != null ? student.getSignedUpCourses() : null;
+    }
+
+    @GetMapping("requests/course")
+    public ModelAndView getRequestsForCourse(@RequestParam long id) {
+        Course course = courseRepository.findOne(id);
+
+        Collection<Student> students = studentRepository.findBySignedUpCourses_Course(course); // TODO: 19-Nov-17 Check for null
+
+        ModelAndView mv = new ModelAndView("course-sign-up-requests");
+        mv.getModel().put("course", course); // TODO: 19-Nov-17 Check for null in the view
+        mv.getModel().put("studentsList", students);
+
+        return mv;
     }
 }
