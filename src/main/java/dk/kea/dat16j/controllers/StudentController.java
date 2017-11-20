@@ -54,6 +54,7 @@ public class StudentController {
         ModelAndView mv = new ModelAndView("course/course-sign-up");
 
         if (requestedCourses != null && requestedCourses.size() > 0) {
+            // TODO: 20-Nov-17 Also remove courses that student is already attending, but what if this will be for next semester?
             mv.getModel().put("coursesList", courseRepository.findAllByIdNotIn(requestedCourses));
         } else {
             mv.getModel().put("coursesList", courseRepository.findAll());
@@ -63,16 +64,18 @@ public class StudentController {
 
     @PostMapping("/courses/submit-sign-up")
     public ModelAndView submitSignUp(Authentication authentication,
-                                     @RequestParam(name = "courses") Long[] coursesIds) {
+                                     @RequestParam(name = "courses", required = false) Long[] coursesIds) {
 
-        final Iterable<Course> courses = courseRepository.findAll(Arrays.asList(coursesIds));
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
-        Student student = studentRepository.findByAccount_Username(username);
+        if (coursesIds != null && coursesIds.length > 0) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            Student student = studentRepository.findByAccount_Username(username);
 
-        courses.forEach(student::addCourseSignUp);
-        courseRequestRepository.save(student.getSignedUpCourses());
-        studentRepository.save(student);
+            final Iterable<Course> courses = courseRepository.findAll(Arrays.asList(coursesIds));
+            courses.forEach(student::addCourseSignUp);
+            courseRequestRepository.save(student.getSignedUpCourses());
+            studentRepository.save(student);
+        } // else maybe redirect to /student/courses/sign-up?error=Nothing%20selected
 
         return new ModelAndView(new RedirectView("/student/courses/sign-up"));
     }

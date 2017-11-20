@@ -1,6 +1,7 @@
 package dk.kea.dat16j.models;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -79,6 +80,7 @@ public class Student {
         if (signedUpCourses.stream().noneMatch(c -> c.getId() == course.getId())) {
             CourseRequest courseRequest = new CourseRequest();
             courseRequest.setCourse(course);
+            courseRequest.setTimestamp(LocalDateTime.now());
             return signedUpCourses.add(courseRequest);
         }
         return true;
