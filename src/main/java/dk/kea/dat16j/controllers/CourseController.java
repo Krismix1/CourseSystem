@@ -22,11 +22,8 @@ import java.util.List;
  * Created by Chris on 14-Nov-17.
  */
 @Controller
-@RequestMapping(path = "/courses")
+@RequestMapping(path = "/teacher/courses")
 public class CourseController {
-
-    public static final Logger LOG = LoggerFactory.getLogger(CourseController.class);
-
 
     private final CourseRepository courseRepository;
     private final TeacherRepository teacherRepository;

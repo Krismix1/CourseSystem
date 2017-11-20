@@ -29,7 +29,10 @@ public class HomeController {
         if (request.isUserInRole(AccountRoles.STUDENT.getRole())) {
             return new ModelAndView("student/student-homepage");
         }
-        System.out.println(request.getUserPrincipal().toString());
+        if (request.isUserInRole(AccountRoles.TEACHER.getRole())) {
+            return new ModelAndView("teacher/teacher-homepage");
+        }
+
         return new ModelAndView("homepage/home-signed-in");
     }
 
