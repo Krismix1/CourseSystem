@@ -2,10 +2,7 @@ package dk.kea.dat16j.models;
 
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -26,7 +23,10 @@ public class Account {
     @Max(value = 15)
     @Column(nullable = false)
     private String password; // TODO: 13-Nov-17 see if there is a Password class in Security module
-//    private boolean enabled; // TODO: 13-Nov-17 security related, to be uncommented later
+    @Column(columnDefinition = "TINYINT default '1'", length = 1)
+    private boolean enabled;
+    @OneToOne
+    private AccountRole accountRole;
 
 
     public long getId() {
@@ -56,5 +56,21 @@ public class Account {
     // Because in this Domain Logic the username name is an email
     public String getEmail() {
         return username;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public AccountRole getAccountRole() {
+        return accountRole;
+    }
+
+    public void setAccountRole(AccountRole accountRole) {
+        this.accountRole = accountRole;
     }
 }
