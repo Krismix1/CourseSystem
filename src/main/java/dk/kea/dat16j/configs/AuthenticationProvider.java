@@ -29,7 +29,7 @@ public class AuthenticationProvider {
 //        jdbcImpl.setUsersByUsernameQuery("select username,password, enabled from users where username=?");
 //        jdbcImpl.setAuthoritiesByUsernameQuery("select b.username, a.role from user_roles a, users b where b.username=? and a.userid=b.userid");
         jdbcImpl.setUsersByUsernameQuery("select username,password,enabled from account where username=?");
-        jdbcImpl.setAuthoritiesByUsernameQuery("select username, role_name from account_role, account where username=?");
+        jdbcImpl.setAuthoritiesByUsernameQuery("select b.username, a.role_name from account_role a, account b where b.username=? and a.id=b.account_role_id");
         return jdbcImpl;
     }
 
