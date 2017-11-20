@@ -10,20 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Chris on 19-Nov-17.
  */
 @Controller
+@RequestMapping("/student")
 public class StudentController {
 
     private final CourseRepository courseRepository;
@@ -38,13 +38,25 @@ public class StudentController {
     }
 
     @GetMapping("/courses/sign-up")
-    public ModelAndView getCourseSignUpPage() {
+    public ModelAndView getCourseSignUpPage(Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        Student student = studentRepository.findByAccount_Username(username);
+        final List<Long> requestedCourses = student.getSignedUpCourses()
+                .stream()
+                .map(courseRequest -> courseRequest.getCourse().getId())
+                .collect(Collectors.toList());
+
 
         ModelAndView mv = new ModelAndView("course/course-sign-up");
 
-        // TODO Send only the courses that the student didn't yet sign up for
-        mv.getModel().put("coursesList", courseRepository.findAll());
 
+        if (requestedCourses != null && requestedCourses.size() > 0) {
+            mv.getModel().put("coursesList", courseRepository.findAllByIdNotIn(requestedCourses));
+        } else {
+            mv.getModel().put("coursesList", courseRepository.findAll());
+        }
         return mv;
     }
 
@@ -61,16 +73,17 @@ public class StudentController {
         courseRequestRepository.save(student.getSignedUpCourses());
         studentRepository.save(student);
 
-        return new ModelAndView(new RedirectView("/courses/sign-up"));
+        return new ModelAndView(new RedirectView("/student/courses/sign-up"));
     }
 
     @GetMapping("/courses/signed-up/all")
     @ResponseBody // to allow students to see their requests
-    public Collection<CourseRequest> getAllSignUpRequest(@RequestParam String firstName,
-                                                         @RequestParam String lastName) {
+    public Collection<CourseRequest> getAllSignUpRequest(Authentication authentication) {
         ModelAndView mv = new ModelAndView();
 
-        final Student student = studentRepository.findByFirstNameAndLastName(firstName, lastName);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        Student student = studentRepository.findByAccount_Username(username);
         return student != null ? student.getSignedUpCourses() : null;
     }
 

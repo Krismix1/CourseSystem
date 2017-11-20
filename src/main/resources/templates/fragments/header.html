@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Header template</title>
@@ -57,6 +58,29 @@
             <!--<form th:action="@{/logout}" method="post">-->
                 <!--<input type="submit" value="Sign Out"/>-->
             <!--</form>-->
+        </ul>
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="student-header">
+    <a class="navbar-brand" href="http://localhost:8080/">
+        <img src="https://cdn0.iconfinder.com/data/icons/pixel-perfect-at-24px-volume-2/24/2010-512.png" width="30px"
+             height="30px" class="d-inline-block align-top" alt=""/>
+        School name
+    </a>
+    <!--This button will appear on small screens-->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#signedInnavbarSupportedContent"
+            aria-controls="signedInnavbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="studentNavbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="http://localhost:8080/">Home<span class="sr-only">(current)</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="/student/courses/sign-up">Sign up for courses</a></li>
+            <li class="nav-item"><a class="nav-link" href="/student/courses/signed-up/all">Signed up courses</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item"><a class="nav-link" href="/logout"><i class="fa fa-sign-in" aria-hidden="true"></i> Logout</a></li>
         </ul>
     </div>
 </nav>

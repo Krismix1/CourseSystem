@@ -1,5 +1,6 @@
 package dk.kea.dat16j.controllers;
 
+import dk.kea.dat16j.models.AccountRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -20,23 +21,23 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class HomeController {
 
-    public static final Logger LOG = LoggerFactory.getLogger(HomeController.class);
-
     @GetMapping(path = {"/", "/home"})
     public ModelAndView homePage(HttpServletRequest request) {
         if (request.getUserPrincipal() == null) { // the user is not logged in
-            LOG.debug("Guest has connected.");
             return new ModelAndView("homepage/home-not-signed-in");
-        } else {
-            return new ModelAndView("homepage/home-signed-in");
         }
+        if (request.isUserInRole(AccountRoles.STUDENT.getRole())) {
+            return new ModelAndView("student/student-homepage");
+        }
+        System.out.println(request.getUserPrincipal().toString());
+        return new ModelAndView("homepage/home-signed-in");
     }
 
-    @RequestMapping(value="/logout", method = RequestMethod.GET)
-    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         // This is not good for unit testing, using the SecurityContextHolder.getContext().getAuthentication()
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){
+        if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
