@@ -23,14 +23,6 @@
 
     <h3>Please select which courses you would like to sign up for.</h3>
     <form action="#" th:action="@{/courses/submit-sign-up}" method="post">
-        <div>
-            <label>First name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" required="true"/>
-        </div>
-        <div>
-            <label>Last name</label>
-            <input type="text" class="form-control" id="lastName" name="lastName" required="true"/>
-        </div>
         <div class="custom-controls-stacked">
             <!--<label>Courses</label><br/>-->
             <label class="custom-control custom-checkbox" th:unless="!coursesList.empty"

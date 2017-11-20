@@ -50,17 +50,13 @@ public class StudentController {
 
     @PostMapping("/courses/submit-sign-up")
     public ModelAndView submitSignUp(Authentication authentication,
-                                     @RequestParam(name = "courses") Long[] coursesIds,
-                                     @RequestParam String firstName,
-                                     @RequestParam String lastName) {
+                                     @RequestParam(name = "courses") Long[] coursesIds) {
 
         final Iterable<Course> courses = courseRepository.findAll(Arrays.asList(coursesIds));
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
-//        Student student = studentRepository.findByAccount_Username(username);
-//        System.out.println(student);
+        Student student = studentRepository.findByAccount_Username(username);
 
-        Student student = studentRepository.findByFirstNameAndLastName(firstName, lastName);
         courses.forEach(student::addCourseSignUp);
         courseRequestRepository.save(student.getSignedUpCourses());
         studentRepository.save(student);
