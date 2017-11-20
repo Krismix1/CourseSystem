@@ -22,7 +22,7 @@ public class Account {
     @Min(value = 6)
     @Max(value = 15)
     @Column(nullable = false)
-    private String password; // TODO: 13-Nov-17 see if there is a Password class in Security module
+    private String password;
     @Column(columnDefinition = "TINYINT default '1'", length = 1)
     private boolean enabled;
     @OneToOne

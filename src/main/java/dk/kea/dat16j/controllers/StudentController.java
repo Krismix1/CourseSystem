@@ -54,7 +54,7 @@ public class StudentController {
         ModelAndView mv = new ModelAndView("course/course-sign-up");
 
         if (requestedCourses != null && requestedCourses.size() > 0) {
-            // TODO: 20-Nov-17 Also remove courses that student is already attending, but what if this will be for next semester?
+            // TODO: 20-Nov-17 Also remove from show-list of courses that student is already attending, but what if this will be for next semester?
             mv.getModel().put("coursesList", courseRepository.findAllByIdNotIn(requestedCourses));
         } else {
             mv.getModel().put("coursesList", courseRepository.findAll());

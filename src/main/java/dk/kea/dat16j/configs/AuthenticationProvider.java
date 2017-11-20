@@ -25,9 +25,6 @@ public class AuthenticationProvider {
     public UserDetailsService userDetailsService() {
         JdbcDaoImpl jdbcImpl = new JdbcDaoImpl();
         jdbcImpl.setDataSource(dataSource());
-        // FIXME: 10-Nov-17 in case my queries don't work
-//        jdbcImpl.setUsersByUsernameQuery("select username,password, enabled from users where username=?");
-//        jdbcImpl.setAuthoritiesByUsernameQuery("select b.username, a.role from user_roles a, users b where b.username=? and a.userid=b.userid");
         jdbcImpl.setUsersByUsernameQuery("select username,password,enabled from account where username=?");
         jdbcImpl.setAuthoritiesByUsernameQuery("select b.username, a.role_name from account_role a, account b where b.username=? and a.id=b.account_role_id");
         return jdbcImpl;

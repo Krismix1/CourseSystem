@@ -28,7 +28,7 @@ public class Course {
     private String learningOutcome;
     private String learningContent;
     private String learningActivities;
-    private String examForm; // TODO: 13-Nov-17 Maybe a new class?
+    private String examForm;
     @ManyToMany
     private Collection<Teacher> teachers;
 
