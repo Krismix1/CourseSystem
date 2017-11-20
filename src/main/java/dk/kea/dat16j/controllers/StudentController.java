@@ -1,7 +1,6 @@
 package dk.kea.dat16j.controllers;
 
 import dk.kea.dat16j.models.Course;
-import dk.kea.dat16j.models.CourseRequest;
 import dk.kea.dat16j.models.Student;
 import dk.kea.dat16j.repositories.CourseRepository;
 import dk.kea.dat16j.repositories.CourseRequestRepository;
@@ -10,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -51,7 +53,6 @@ public class StudentController {
 
         ModelAndView mv = new ModelAndView("course/course-sign-up");
 
-
         if (requestedCourses != null && requestedCourses.size() > 0) {
             mv.getModel().put("coursesList", courseRepository.findAllByIdNotIn(requestedCourses));
         } else {
@@ -77,14 +78,16 @@ public class StudentController {
     }
 
     @GetMapping("/courses/signed-up/all")
-    @ResponseBody // to allow students to see their requests
-    public Collection<CourseRequest> getAllSignUpRequest(Authentication authentication) {
-        ModelAndView mv = new ModelAndView();
+    public ModelAndView getAllSignUpRequest(Authentication authentication) {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
         Student student = studentRepository.findByAccount_Username(username);
-        return student != null ? student.getSignedUpCourses() : null;
+
+        ModelAndView mv = new ModelAndView("student/student-course-requests");
+        mv.getModel().put("requestsList", student.getSignedUpCourses());
+
+        return mv;
     }
 
     @GetMapping("requests/course")

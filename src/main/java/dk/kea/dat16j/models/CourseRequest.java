@@ -15,6 +15,7 @@ public class CourseRequest {
     private long id;
     @OneToOne
     private Course course;
+    // TODO: 20-Nov-17 Add timestamp of request
 
     public long getId() {
         return id;
