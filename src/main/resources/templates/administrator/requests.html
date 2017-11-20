@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Requests</title>
+
+    <!--Import Bootstrap-->
+    <meta name="viewport" learningContent="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+            integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+</head>
+<body>
+<div th:replace="fragments/header::administrator-header">Here will be the header</div>
+
+<div class="container">
+    <h3 th:if="${course == null}">No course found</h3>
+    <div th:object="${course}" th:if="${course != null}">
+        <h3 th:text="'Requests for ' + ${course.englishName}">Requests
+            for &lt;course name&gt;</h3>
+        <div style="width:50%;" align="center">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <td>Student</td>
+                    <td>Action</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${studentsList == null || studentsList.empty}">
+                    <td colspan="2">No Request</td>
+                </tr>
+                <tr th:unless="!studentsList.empty" th:each="student : ${studentsList}">
+                    <td th:text="${student.firstName} + ' ' + ${student.lastName}">Student name...</td>
+                    <td><a class="btn btn-success" href="#" role="button">Approve</a>
+                        <a class="btn btn-danger" href="#" role="button">Reject</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

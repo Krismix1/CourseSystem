@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/home").permitAll()
                 .antMatchers("/student/**").access("hasRole(\'"+ AccountRoles.STUDENT.getRole()+"\')")
                 .antMatchers("/teacher/**").access("hasRole(\'"+ AccountRoles.TEACHER.getRole()+"\')")
+                .antMatchers("/administrator/**").access("hasRole(\'"+ AccountRoles.ADMINISTRATOR.getRole()+"\')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

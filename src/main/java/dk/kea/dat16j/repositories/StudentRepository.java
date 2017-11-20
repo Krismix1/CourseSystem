@@ -14,4 +14,5 @@ public interface StudentRepository extends CrudRepository<Student, Long> {
     Student findByFirstNameAndLastName(String firstName, String lastName);
 
     Collection<Student> findBySignedUpCourses_Course(Course course);
+    Collection<Student> findBySignedUpCourses_CourseOrderBySignedUpCoursesTimestamp(Course course);
 }

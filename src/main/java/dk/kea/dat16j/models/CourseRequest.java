@@ -18,7 +18,7 @@ public class CourseRequest {
     @NotNull
     private Course course;
     @Convert(converter = LocalDateTimeAttributeConverter.class)
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp; // TODO: 21-Nov-17 Add timezone for timestamp, because this is the format that currently is saved "2017-11-21 00:26:48"
 
     public long getId() {
         return id;

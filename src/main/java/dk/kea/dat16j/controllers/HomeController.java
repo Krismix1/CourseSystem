@@ -1,8 +1,6 @@
 package dk.kea.dat16j.controllers;
 
 import dk.kea.dat16j.models.AccountRoles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -31,6 +29,9 @@ public class HomeController {
         }
         if (request.isUserInRole(AccountRoles.TEACHER.getRole())) {
             return new ModelAndView("teacher/teacher-homepage");
+        }
+        if (request.isUserInRole(AccountRoles.ADMINISTRATOR.getRole())) {
+            return new ModelAndView("administrator/administrator-homepage");
         }
 
         return new ModelAndView("homepage/home-signed-in");
