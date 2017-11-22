@@ -45,7 +45,7 @@ public class CourseController {
         if (teacher == null) {
             throw new NullPointerException();
         }
-        ModelAndView mv = new ModelAndView("courses-all");
+        ModelAndView mv = new ModelAndView("teacher/courses-all");
         mv.getModel().put("coursesList", courseRepository.findAllByTeachers(teacher));
 
         return mv;
@@ -53,7 +53,7 @@ public class CourseController {
 
     @GetMapping(path = "/create")
     public ModelAndView getCreateCoursePage() {
-        ModelAndView mv = new ModelAndView("create-course");
+        ModelAndView mv = new ModelAndView("teacher/create-course");
         mv.getModel().put("studyProgrammes", studyProgrammeRepository.findAll());
         mv.getModel().put("teachersList", teacherRepository.findAll());
         return mv;
@@ -136,7 +136,7 @@ public class CourseController {
         }
         // TODO: 16-Nov-17 Check for null, or open page 404
 
-        ModelAndView mv = new ModelAndView("edit-course");
+        ModelAndView mv = new ModelAndView("teacher/edit-course");
         mv.getModel().put("course", course);
         mv.getModel().put("teachersList", teacherRepository.findAll());
         mv.getModel().put("studyProgrammes", studyProgrammeRepository.findAll());

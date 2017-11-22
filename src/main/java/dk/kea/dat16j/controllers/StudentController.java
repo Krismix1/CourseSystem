@@ -52,7 +52,7 @@ public class StudentController {
         // add courses, by id, that the student is already attending, so that they are filtered out, to remove confusion
         requestedCourses.addAll(student.getAttendingCourses().stream().map(Course::getId).collect(Collectors.toList()));
 
-        ModelAndView mv = new ModelAndView("course/course-sign-up");
+        ModelAndView mv = new ModelAndView("student/course-sign-up");
 
         if (requestedCourses != null && requestedCourses.size() > 0) {
             mv.getModel().put("coursesList", courseRepository.findAllByIdNotIn(requestedCourses));
@@ -89,19 +89,6 @@ public class StudentController {
 
         ModelAndView mv = new ModelAndView("student/student-course-requests");
         mv.getModel().put("requestsList", student.getSignedUpCourses());
-
-        return mv;
-    }
-
-    @GetMapping("requests/course")
-    public ModelAndView getRequestsForCourse(@RequestParam long id) {
-        Course course = courseRepository.findOne(id);
-
-        Collection<Student> students = studentRepository.findBySignedUpCourses_Course(course); // TODO: 19-Nov-17 Check for null
-
-        ModelAndView mv = new ModelAndView("course-sign-up-requests");
-        mv.getModel().put("course", course); // TODO: 19-Nov-17 Check for null in the view
-        mv.getModel().put("studentsList", students);
 
         return mv;
     }
