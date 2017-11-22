@@ -21,7 +21,7 @@
 <div class="container">
     <h1>Edit</h1>
 
-    <form th:object="${course}" action="#" th:action="@{/courses/} + ${course.id} + '/submit-edit/'" method="post">
+    <form th:object="${course}" action="#" th:action="@{/teacher/courses/} + ${course.id} + '/submit-edit/'" method="post">
         <div class="form-group">
             <div>
                 <label>Name of course in Danish</label>

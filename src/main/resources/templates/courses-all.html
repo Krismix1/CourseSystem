@@ -37,7 +37,7 @@
                 <td th:text="${course.englishName}">Name in English...</td>
                 <td th:text="${course.danishName}">Name in Danish...</td>
                 <td th:text="${course.ects}">ECTS...</td>
-                <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/edit'}">Edit</a>
+                <td><a href="#" th:href="@{${course.id} + '/edit'}">Edit</a>
                     <!--/-->
                     <!--<a href="#" th:href="@{'/courses/' + ${course.id} + '/delete'}">Delete</a>-->
                 </td>

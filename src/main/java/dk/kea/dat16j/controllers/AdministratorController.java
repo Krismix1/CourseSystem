@@ -59,7 +59,7 @@ public class AdministratorController {
                 courseRequestRepository.delete(requestId);
                 return "redirect:/administrator/course/" + request.getCourse().getId() + "/requests";
             } else {
-                throw new IllegalStateException("Could not approve request");
+                throw new RuntimeException("Could not approve request");
             }
         }
         return "redirect:/administrator/course-selection";
