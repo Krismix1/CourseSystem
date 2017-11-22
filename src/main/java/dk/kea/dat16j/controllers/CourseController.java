@@ -65,7 +65,7 @@ public class CourseController {
                     String danishName,
             @RequestParam
                     String englishName,
-            @RequestParam(name = "studyProgrammes")
+            @RequestParam(name = "studyProgrammes", required = false)
                     String[] studyProgrammes,
             @RequestParam
                     String mandatory,
@@ -90,10 +90,19 @@ public class CourseController {
             @RequestParam
                     String examForm,
             @RequestParam(name = "teachers")
-                    Long[] teachers
+                    Long[] teachers,
+            @RequestParam
+                    String classCode,
+            @RequestParam
+                    int semester
     ) {
         if (expectedStudents < minStudents || expectedStudents > maxStudents) {
             // TODO: 15-Nov-17 Add this check at frontend as well
+            throw new IllegalArgumentException("Expected students has to be less or equal to max and bigger or equal to min");
+        }
+
+        if(semester <= 0){
+            throw new IllegalArgumentException("Semester < 0");
         }
 
         Course course = new Course();
@@ -101,6 +110,8 @@ public class CourseController {
         course.setEnglishName(englishName);
         course.setMandatory(mandatory.equalsIgnoreCase("mandatory"));
         course.setEcts(ects);
+        course.setClassCode(classCode);
+        course.setSemester(semester);
         course.setCourseLanguage(courseLanguage);
         course.setMinimumNumberOfStudent(minStudents);
         course.setMaximumNumberOfStudent(maxStudents);
@@ -113,6 +124,10 @@ public class CourseController {
         course.setTeachers(CollectionsUtility.makeCollection(teacherRepository.findAll(Arrays.asList(teachers))));
 
         courseRepository.save(course);
+
+        if (studyProgrammes == null) {
+            studyProgrammes = new String[0];
+        }
 
         Collection<StudyProgramme> studyProgrammesObj = studyProgrammeRepository.findAllByNameIn(Arrays.asList(studyProgrammes)); // study programmes will not be be created here
         for (StudyProgramme programme : studyProgrammesObj) {
@@ -153,7 +168,7 @@ public class CourseController {
                     String danishName,
             @RequestParam
                     String englishName,
-            @RequestParam(name = "studyProgrammes") // TODO: 19-Nov-17 think about required = false: force user at front end to select smth or have course that is yet not part of study programmes
+            @RequestParam(name = "studyProgrammes", required = false)
                     String[] studyProgrammes,
             @RequestParam
                     String mandatory,
@@ -178,10 +193,19 @@ public class CourseController {
             @RequestParam
                     String examForm,
             @RequestParam(name = "teachers") // TODO: 19-Nov-17 think about required = false: force user at front end to select smth or have course that has not teachers
-                    Long[] teachers
+                    Long[] teachers,
+            @RequestParam
+                    String classCode,
+            @RequestParam
+                    int semester
     ) {
         if (expectedStudents < minStudents || expectedStudents > maxStudents) {
             // TODO: 15-Nov-17 Add this check at frontend as well
+            throw new IllegalArgumentException("Expected students has to be less or equal to max and bigger or equal to min");
+        }
+
+        if(semester <= 0){
+            throw new IllegalArgumentException("Semester < 0");
         }
 
         // FIXME: 17-Nov-17 Change the search to use something more unique, perhaps the Class Code? Speak with Alex about this
@@ -195,6 +219,8 @@ public class CourseController {
         course.setEnglishName(englishName);
         course.setMandatory(mandatory.equalsIgnoreCase("mandatory"));
         course.setEcts(ects);
+        course.setClassCode(classCode);
+        course.setSemester(semester);
         course.setCourseLanguage(courseLanguage);
         course.setMinimumNumberOfStudent(minStudents);
         course.setMaximumNumberOfStudent(maxStudents);
@@ -208,6 +234,9 @@ public class CourseController {
 
         courseRepository.save(course);
 
+        if (studyProgrammes == null) {
+            studyProgrammes = new String[0];
+        }
         final List<String> studyProgrammesNames = Arrays.asList(studyProgrammes);
         // TODO: 19-Nov-17 Make the StudyProgramme - Course mapping bidirectional? This will simplify the task of removing the course from study programmes
         Collection<StudyProgramme> studyProgrammesObj = studyProgrammeRepository.findAllByNameIn(studyProgrammesNames); // study programmes will not be be created here
@@ -227,7 +256,13 @@ public class CourseController {
 
         // TODO: 17-Nov-17 Write a unit test to test this
         // This will contain all the study programmes that have been not selected on the website by the user
-        Collection<StudyProgramme> notSelectedStudyProgrammes = studyProgrammeRepository.findAllByNameNotIn(studyProgrammesNames);
+        Collection<StudyProgramme> notSelectedStudyProgrammes;
+        // this check/logic is needed because method findAllByNameNotIn() doesn't return all study programmes when the parameter has 0 elements
+        if (studyProgrammes.length > 0) {
+            notSelectedStudyProgrammes = studyProgrammeRepository.findAllByNameNotIn(studyProgrammesNames);
+        } else {
+            notSelectedStudyProgrammes = CollectionsUtility.makeCollection(studyProgrammeRepository.findAll());
+        }
         notSelectedStudyProgrammes.forEach(studyProgramme -> studyProgramme.removeCourseIfContains(course.getId()));
         studyProgrammeRepository.save(notSelectedStudyProgrammes);
 

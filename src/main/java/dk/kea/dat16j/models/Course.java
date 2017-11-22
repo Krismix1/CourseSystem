@@ -31,6 +31,8 @@ public class Course {
     private String examForm;
     @ManyToMany
     private Collection<Teacher> teachers;
+    private String classCode;
+    private int semester;
 
     public long getId() {
         return id;
@@ -150,6 +152,22 @@ public class Course {
 
     public void setTeachers(Collection<Teacher> teachers) {
         this.teachers = teachers;
+    }
+
+    public String getClassCode() {
+        return classCode;
+    }
+
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
+    }
+
+    public int getSemester() {
+        return semester;
+    }
+
+    public void setSemester(int semester) {
+        this.semester = semester;
     }
 
     public boolean hasTeacher(Teacher teacher) {

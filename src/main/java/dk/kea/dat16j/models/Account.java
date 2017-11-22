@@ -19,8 +19,8 @@ public class Account {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Min(value = 6)
-    @Max(value = 15)
+//    @Min(value = 6)
+//    @Max(value = 15)
     @Column(nullable = false)
     private String password;
     @Column(columnDefinition = "TINYINT default '1'", length = 1)
