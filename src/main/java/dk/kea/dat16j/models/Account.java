@@ -3,8 +3,6 @@ package dk.kea.dat16j.models;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 /**
  * Created by Chris on 13-Nov-17.
@@ -19,8 +17,6 @@ public class Account {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Min(value = 6)
-    @Max(value = 15)
     @Column(nullable = false)
     private String password;
     @Column(columnDefinition = "TINYINT default '1'", length = 1)
