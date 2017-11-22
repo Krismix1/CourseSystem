@@ -17,7 +17,7 @@ public class Student {
     private String lastName;
     @ManyToMany
     private Collection<Course> attendingCourses; // this will store courses that the student is already attending
-    @OneToMany
+    @OneToMany(mappedBy = "student")
     private Collection<CourseRequest> signedUpCourses; // this will store courses where the student is waiting for approval
     @OneToOne
 //    @Column(unique = true, nullable = false) // hibernate exception
@@ -77,12 +77,33 @@ public class Student {
         if (signedUpCourses == null) {
             signedUpCourses = new ArrayList<>(1);
         }
-        if (signedUpCourses.stream().noneMatch(c -> c.getId() == course.getId())) {
+        if (signedUpCourses.stream().noneMatch(c -> c.getId() == course.getId()) &&
+                attendingCourses.stream().noneMatch(c -> c.getId() == course.getId())) {
             CourseRequest courseRequest = new CourseRequest();
             courseRequest.setCourse(course);
             courseRequest.setTimestamp(LocalDateTime.now());
+            courseRequest.setStudent(this);
             return signedUpCourses.add(courseRequest);
         }
-        return true;
+        return false;
+    }
+
+    public boolean approveSignUpRequest(CourseRequest courseRequest) {
+        if (signedUpCourses != null) {
+            if (signedUpCourses.removeIf(request -> request.getId() == courseRequest.getId())) { // This means that the student has such a request saved
+                if (attendingCourses.stream().noneMatch(course -> course.getId() == courseRequest.getCourse().getId())) { // Because at the moment(22.11.2017 1:06AM) after the request
+                    // is approved it gets deleted, that means that students can create a new request for the same course (by modifying the 'value' attribute of the input and submitting the form, or external tools)
+                    return attendingCourses.add(courseRequest.getCourse());
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean rejectSignUpRequest(CourseRequest courseRequest) {
+        if (signedUpCourses != null) {
+            return signedUpCourses.removeIf(request -> request.getId() == courseRequest.getId());
+        }
+        return false;
     }
 }

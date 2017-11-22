@@ -32,13 +32,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:if="${studentsList == null || studentsList.empty}">
+                <tr th:if="${requestsLists == null || requestsLists.empty}">
                     <td colspan="2">No Request</td>
                 </tr>
-                <tr th:unless="!studentsList.empty" th:each="student : ${studentsList}">
-                    <td th:text="${student.firstName} + ' ' + ${student.lastName}">Student name...</td>
-                    <td><a class="btn btn-success" href="#" role="button">Approve</a>
-                        <a class="btn btn-danger" href="#" role="button">Reject</a>
+                <tr th:unless="${requestsLists == null || requestsLists.empty}" th:each="request : ${requestsLists}">
+                    <td th:text="${request.student.firstName} + ' ' + ${request.student.lastName}">Student name...</td>
+                    <td>
+                        <div class="form-inline">
+                            <form th:action="@{/administrator/request/approve}" method="post">
+                                <input hidden="hidden" th:value="${request.id}" name="requestId"/>
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                            <form th:action="@{/administrator/request/reject}" method="post">
+                                <input hidden="hidden" th:value="${request.id}" name="requestId"/>
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
