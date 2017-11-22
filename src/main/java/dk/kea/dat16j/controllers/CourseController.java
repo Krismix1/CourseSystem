@@ -2,11 +2,14 @@ package dk.kea.dat16j.controllers;
 
 import dk.kea.dat16j.models.Course;
 import dk.kea.dat16j.models.StudyProgramme;
+import dk.kea.dat16j.models.Teacher;
 import dk.kea.dat16j.repositories.CourseRepository;
 import dk.kea.dat16j.repositories.StudyProgrammeRepository;
 import dk.kea.dat16j.repositories.TeacherRepository;
 import dk.kea.dat16j.utils.CollectionsUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,9 +38,15 @@ public class CourseController {
     }
 
     @GetMapping(path = "/all")
-    public ModelAndView getAllCourses() {
+    public ModelAndView getAllCourses(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        Teacher teacher = teacherRepository.findByAccount_Username(username);
+        if (teacher == null) {
+            throw new NullPointerException();
+        }
         ModelAndView mv = new ModelAndView("courses-all");
-        mv.getModel().put("coursesList", courseRepository.findAll());
+        mv.getModel().put("coursesList", courseRepository.findAllByTeachers(teacher));
 
         return mv;
     }
@@ -110,12 +119,21 @@ public class CourseController {
             programme.getCourses().add(course); // TODO: 17-Nov-17 Check if the study programme already has the course attached (when editing a course) 
             studyProgrammeRepository.save(studyProgrammesObj);
         }
-        return new ModelAndView(new RedirectView("/courses/all"));
+        return new ModelAndView(new RedirectView("/teacher/courses/all"));
     }
 
     @GetMapping(path = "/{id}/edit") // TODO: 16-Nov-17 Change to a POST, to not show data
-    public ModelAndView getCourseEditPage(@PathVariable(name = "id") long id) {
+    public ModelAndView getCourseEditPage(@PathVariable(name = "id") long id,
+                                          Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        final Teacher teacher = teacherRepository.findByAccount_Username(username);
+
         Course course = courseRepository.findOne(id);
+        if (course.getTeachers().stream().noneMatch(t -> t.getId() == teacher.getId())) {
+            // Only teachers that created that course or a teaching it can edit the course
+            throw new RuntimeException("The current teacher is not teaching the requested course");
+        }
         // TODO: 16-Nov-17 Check for null, or open page 404
 
         ModelAndView mv = new ModelAndView("edit-course");
@@ -213,6 +231,6 @@ public class CourseController {
         notSelectedStudyProgrammes.forEach(studyProgramme -> studyProgramme.removeCourseIfContains(course.getId()));
         studyProgrammeRepository.save(notSelectedStudyProgrammes);
 
-        return new ModelAndView(new RedirectView("/courses/all"));
+        return new ModelAndView(new RedirectView("/teacher/courses/all"));
     }
 }

@@ -1,6 +1,7 @@
 package dk.kea.dat16j.repositories;
 
 import dk.kea.dat16j.models.Course;
+import dk.kea.dat16j.models.Teacher;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
@@ -10,4 +11,6 @@ import java.util.Collection;
  */
 public interface CourseRepository extends CrudRepository<Course, Long> {
     Collection<Course> findAllByIdNotIn(Collection<Long> courses);
+
+    Collection<Course> findAllByTeachers(Teacher teacher);
 }

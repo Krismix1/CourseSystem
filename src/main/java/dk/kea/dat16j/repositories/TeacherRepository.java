@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
  * Created by Chris on 14-Nov-17.
  */
 public interface TeacherRepository extends CrudRepository<Teacher, Long> {
+    Teacher findByAccount_Username(String username);
 }

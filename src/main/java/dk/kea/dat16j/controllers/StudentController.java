@@ -49,12 +49,12 @@ public class StudentController {
                 .stream()
                 .map(courseRequest -> courseRequest.getCourse().getId())
                 .collect(Collectors.toList());
-
+        // add courses, by id, that the student is already attending, so that they are filtered out, to remove confusion
+        requestedCourses.addAll(student.getAttendingCourses().stream().map(Course::getId).collect(Collectors.toList()));
 
         ModelAndView mv = new ModelAndView("course/course-sign-up");
 
         if (requestedCourses != null && requestedCourses.size() > 0) {
-            // TODO: 20-Nov-17 Also remove from show-list of courses that student is already attending, but what if this will be for next semester?
             mv.getModel().put("coursesList", courseRepository.findAllByIdNotIn(requestedCourses));
         } else {
             mv.getModel().put("coursesList", courseRepository.findAll());
@@ -83,7 +83,7 @@ public class StudentController {
     @GetMapping("/courses/signed-up/all")
     public ModelAndView getAllSignUpRequest(Authentication authentication) {
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal(); // TODO: 22-Nov-17 Null check? 
         String username = userDetails.getUsername();
         Student student = studentRepository.findByAccount_Username(username);
 
