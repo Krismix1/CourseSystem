@@ -13,4 +13,6 @@ public interface CourseRepository extends CrudRepository<Course, Long> {
     Collection<Course> findAllByIdNotIn(Collection<Long> courses);
 
     Collection<Course> findAllByTeachers(Teacher teacher);
+
+    Collection<Course> findAllByEnglishNameContainingIgnoreCaseOrDanishNameContainingIgnoreCase(String englishName, String danishName);
 }

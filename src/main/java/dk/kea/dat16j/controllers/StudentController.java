@@ -92,4 +92,15 @@ public class StudentController {
 
         return mv;
     }
+
+    @GetMapping("/course/search")
+    public ModelAndView searchCourse(@RequestParam(name = "course", defaultValue = "NO_NAME") String courseName) {
+        Collection<Course> courses = courseRepository.findAllByEnglishNameContainingIgnoreCaseOrDanishNameContainingIgnoreCase(courseName, courseName);
+        System.out.println(courses.size());
+        ModelAndView mv = new ModelAndView("/student/search-course");
+        mv.getModel().put("coursesList", courses);
+        return mv;
+    }
+
+
 }

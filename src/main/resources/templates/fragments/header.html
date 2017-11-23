@@ -85,6 +85,16 @@
             <li class="nav-item"><a class="nav-link" href="/student/courses/signed-up/all">Signed up courses</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                <!--Search bar for student-->
+                <form th:action="@{/student/course/search}" method="get">
+                    <input class="sb-search-input" placeholder="Enter course name..." type="text" value=""
+                           name="course" id="search"/>
+                    <input class="sb-search-submit" type="submit" value=""/>
+                    <span class="sb-icon-search"></span>
+                </form>
+                <!--End of Search Bar for student-->
+            </li>
             <li class="nav-item"><a class="nav-link" href="/logout"><i class="fa fa-sign-in" aria-hidden="true"></i>
                 Logout</a></li>
         </ul>
@@ -138,6 +148,7 @@
         </ul>
     </div>
 </nav>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
