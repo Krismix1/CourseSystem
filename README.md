@@ -38,7 +38,7 @@ In order to achieve this, the following architecture was designed:
 2. Create and associate an *Internet Gateway* to allow communication between instances in the *VPC* and the internet
 3. Create 2 *Route Tables*, of which one has the *IGW* attached to it, thus allowing communication on internet and second one without, thus allowing creation of instances that are not available from internet
 4. Create a *Network Access Control List* to configure more inbound and outbound rules
-5. Create a *subnet* which uses the *RT* without the *IGW*, so that the *subnet* remains private
+5. Create 2 *subnets* which use the *RT* without the *IGW*, so that the *subnets* remain private (2 because AWS Launch Wizard complained)
 6. Create a *subnet* which uses the *RT* with the *IGW*, so that the *subnet* is public
 7. Create a *RDS* instance in the *private subnet*, with *MySQL engine* on which the database will be saved, with inbound traffic on port 22 (for *SSH*) and 3306 (for *MySQL*) and outbound everything
 8. Create an *EC2* instance in the *public subnet* on which the application will be, with inbound traffic on port 8080 (for *Tomcat*) and port 22 (for *SSH*) and outbound everything
