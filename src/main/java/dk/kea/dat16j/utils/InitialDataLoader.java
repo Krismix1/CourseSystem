@@ -58,44 +58,44 @@ public class InitialDataLoader implements
         AccountRole adminRole = createRoleIfNotFound(AccountRoles.ADMINISTRATOR.getRole());
 
         Account account = new Account();
-        account.setUsername("sand@kea.dk");
+        account.setUsername("tech1@kea.dk");
         account.setPassword(passwordEncoder.encode("1234"));
         account.setAccountRole(teacherRole);
         account.setEnabled(true);
         createAccountIfNotFound(account);
 
         Account account2 = new Account();
-        account2.setUsername("coag@kea.dk");
+        account2.setUsername("tech2@kea.dk");
         account2.setPassword(passwordEncoder.encode("1234"));
         account2.setAccountRole(teacherRole);
         account2.setEnabled(true);
         createAccountIfNotFound(account2);
 
-        Teacher andreaa = new Teacher();
-        andreaa.setFirstName("Andreea");
-        andreaa.setLastName("Coradini");
-        createTeacherIfNotFound(andreaa);
+        Teacher teacher1 = new Teacher();
+        teacher1.setFirstName("Teacher 1");
+        teacher1.setLastName("Last name 1");
+        createTeacherIfNotFound(teacher1);
 
-        Teacher faisal = new Teacher();
-        faisal.setFirstName("Faisal");
-        faisal.setLastName("Jarkass");
-        createTeacherIfNotFound(faisal);
+        Teacher teacher2 = new Teacher();
+        teacher2.setFirstName("Teacher 2");
+        teacher2.setLastName("Last name 2");
+        createTeacherIfNotFound(teacher2);
 
-        Teacher alex = new Teacher();
-        alex.setFirstName("Constantin Alexandru");
-        alex.setLastName("Gheorghiasa");
-        alex.setAccount(account2);
-        createTeacherIfNotFound(alex);
+        Teacher teacher3 = new Teacher();
+        teacher3.setFirstName("Teacher 3");
+        teacher3.setLastName("Last name 3");
+        teacher3.setAccount(account2);
+        createTeacherIfNotFound(teacher3);
 
-        Teacher santiago = new Teacher();
-        santiago.setFirstName("Santiago");
-        santiago.setLastName("Donoso");
-        santiago.setAccount(account);
-        createTeacherIfNotFound(santiago);
+        Teacher teacher4 = new Teacher();
+        teacher4.setFirstName("Teacher 4");
+        teacher4.setLastName("Last name 4");
+        teacher4.setAccount(account);
+        createTeacherIfNotFound(teacher4);
 
         Account student1Account = new Account();
         student1Account.setAccountRole(studRole);
-        student1Account.setUsername("stud@stud.kea.dk");
+        student1Account.setUsername("stud1@kea.dk");
         student1Account.setPassword(passwordEncoder.encode("1234"));
         student1Account.setEnabled(true);
         createAccountIfNotFound(student1Account);
@@ -108,7 +108,7 @@ public class InitialDataLoader implements
 
         Account student2Account = new Account();
         student2Account.setAccountRole(studRole);
-        student2Account.setUsername("another@stud.kea.dk");
+        student2Account.setUsername("stud2@kea.dk");
         student2Account.setPassword(passwordEncoder.encode("1234"));
         student2Account.setEnabled(true);
         createAccountIfNotFound(student2Account);
@@ -149,7 +149,7 @@ public class InitialDataLoader implements
         course.setExpectedNumberOfStudent(35);
         course.setClassCode("WD-2018-F-NODEJS");
         course.setSemester(2);
-        course.setTeachers(Arrays.asList(alex));
+        course.setTeachers(Arrays.asList(teacher3));
         createCourseIfNotFound(course);
 
         StudyProgramme studyProgramme1 = new StudyProgramme();
