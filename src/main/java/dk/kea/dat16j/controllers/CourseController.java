@@ -134,7 +134,7 @@ public class CourseController {
             programme.getCourses().add(course); // TODO: 17-Nov-17 Check if the study programme already has the course attached (when editing a course) 
             studyProgrammeRepository.save(studyProgrammesObj);
         }
-        return new ModelAndView(new RedirectView("/teacher/courses/all"));
+        return new ModelAndView(new RedirectView("/teacher/courses/all", true));
     }
 
     @GetMapping(path = "/{id}/edit") // TODO: 16-Nov-17 Change to a POST, to not show data
@@ -266,6 +266,6 @@ public class CourseController {
         notSelectedStudyProgrammes.forEach(studyProgramme -> studyProgramme.removeCourseIfContains(course.getId()));
         studyProgrammeRepository.save(notSelectedStudyProgrammes);
 
-        return new ModelAndView(new RedirectView("/teacher/courses/all"));
+        return new ModelAndView(new RedirectView("/teacher/courses/all", true));
     }
 }

@@ -77,7 +77,7 @@ public class StudentController {
             studentRepository.save(student);
         } // else maybe redirect to /student/courses/sign-up?error=Nothing%20selected
 
-        return new ModelAndView(new RedirectView("/student/courses/sign-up"));
+        return new ModelAndView(new RedirectView("/student/courses/sign-up", true));
     }
 
     @GetMapping("/courses/signed-up/all")
