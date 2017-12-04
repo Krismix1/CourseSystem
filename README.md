@@ -1,4 +1,4 @@
-# Spring-for-SWC3-Tech2
+# SWC3 & TECH2 Mandatory Assignment
 
 ## Problem description 
 At our university, each semester students are assigned to courses (mandatory or electives). At the moment the process of presenting and assigning to these courses is not digital. You are to create a web-app that will digitalize this system.
