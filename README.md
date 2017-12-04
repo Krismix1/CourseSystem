@@ -41,6 +41,6 @@ In order to achieve this, the following architecture was designed:
 5. Create 2 *subnets* which use the *RT* without the *IGW*, so that the *subnets* remain private (2 because AWS Launch Wizard complained)
 6. Create a *subnet* which uses the *RT* with the *IGW*, so that the *subnet* is public
 7. Create a *RDS* instance in the *private subnet*, with *MySQL engine* on which the database will be saved, with inbound traffic on port 22 (for *SSH*) and 3306 (for *MySQL*) and outbound everything
-8. Create an *EC2* instance in the *public subnet* on which the application will be, with inbound traffic on port 8080 (for *Tomcat*) and port 22 (for *SSH*) and outbound everything
+8. Create an *EC2* instance in the *public subnet* on which the application will be, with inbound traffic on port 8080 (for *Tomcat*) and port 22 (for *SSH*) and outbound everything, gave an IAM Role with RDS Full Access Policy to allow the instance access the RDS
 9. Install *Tomcat* on the *EC2*
 10. Deploy the **war** file of the system to *Tomcat* by using the manager GUI
