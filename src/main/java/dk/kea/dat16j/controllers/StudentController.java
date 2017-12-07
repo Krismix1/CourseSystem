@@ -5,6 +5,7 @@ import dk.kea.dat16j.models.Student;
 import dk.kea.dat16j.repositories.CourseRepository;
 import dk.kea.dat16j.repositories.CourseRequestRepository;
 import dk.kea.dat16j.repositories.StudentRepository;
+import dk.kea.dat16j.utils.CollectionsUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,11 +55,17 @@ public class StudentController {
 
         ModelAndView mv = new ModelAndView("student/course-sign-up");
 
-        if (requestedCourses != null && requestedCourses.size() > 0) {
-            mv.getModel().put("coursesList", courseRepository.findAllByIdNotIn(requestedCourses));
+        final Collection<Course> unrequestedCourses;
+        if (requestedCourses == null || requestedCourses.size() == 0) { // findAllByIdNotIn() doesn't retrieve anything if the list param is empty, that's why the if
+            unrequestedCourses = CollectionsUtility.makeCollection(courseRepository.findAll());
         } else {
-            mv.getModel().put("coursesList", courseRepository.findAll());
+            unrequestedCourses = courseRepository.findAllByIdNotIn(requestedCourses);
         }
+        // remove courses that are full
+        // maybe actually use the result, like for statistics, courses that are full might be allocated more places in future
+        unrequestedCourses.removeIf(course -> course.getAttendingStudents() >= course.getMaximumNumberOfStudent());
+
+        mv.getModel().put("coursesList", unrequestedCourses);
         return mv;
     }
 
@@ -72,6 +79,11 @@ public class StudentController {
             Student student = studentRepository.findByAccount_Username(username);
 
             final Iterable<Course> courses = courseRepository.findAll(Arrays.asList(coursesIds));
+            for (Course course : courses) {
+                if (course.getAttendingStudents() == course.getMaximumNumberOfStudent()) {
+                    throw new IllegalArgumentException("User tried to request a full course, course id: " + course.getId());
+                }
+            }
             courses.forEach(student::addCourseSignUp);
             courseRequestRepository.save(student.getSignedUpCourses());
             studentRepository.save(student);

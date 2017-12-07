@@ -55,9 +55,16 @@ public class AdministratorController {
         final CourseRequest request = courseRequestRepository.findOne(requestId);
         if (request != null) {
             if (request.getStudent().approveSignUpRequest(request)) {
-                studentRepository.save(request.getStudent());
-                courseRequestRepository.delete(requestId);
-                return "redirect:/administrator/course/" + request.getCourse().getId() + "/requests";
+                final Course course = request.getCourse();
+                if (course.getAttendingStudents() < course.getMaximumNumberOfStudent()) {
+                    course.incrementAttendingStudents(1);
+                    courseRepository.save(course);
+                    studentRepository.save(request.getStudent());
+                    courseRequestRepository.delete(requestId);
+                    return "redirect:/administrator/course/" + course.getId() + "/requests";
+                } else {
+                    throw new IllegalArgumentException("More than maximum students allowed: " + (course.getAttendingStudents() + 1));
+                }
             } else {
                 throw new RuntimeException("Could not approve request");
             }

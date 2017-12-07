@@ -16,7 +16,7 @@
     <!--Make a table and let the user which columns he wants to see + checkbox for each row-->
     <!--Display only courses for which the student didn't yet sign up-->
 
-    <h3 th:if="${coursesList.empty}">You already applied for all courses.</h3>
+    <h3 th:if="${coursesList.empty}">No courses are available. This could be because you already applied for all or because all courses are full.</h3>
     <div th:unless="${coursesList.empty}">
         <h3>Please select which courses you would like to sign up for.</h3>
         <form action="#" th:action="@{/student/courses/submit-sign-up}" method="post">

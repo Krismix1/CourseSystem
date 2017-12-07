@@ -147,6 +147,7 @@ public class InitialDataLoader implements
         course.setMaximumNumberOfStudent(50);
         course.setMinimumNumberOfStudent(15);
         course.setExpectedNumberOfStudent(35);
+        course.setAttendingStudents(0);
         course.setClassCode("WD-2018-F-NODEJS");
         course.setSemester(2);
         course.setTeachers(Arrays.asList(teacher3));

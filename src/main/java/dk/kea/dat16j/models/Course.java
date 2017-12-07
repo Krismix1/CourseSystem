@@ -21,9 +21,10 @@ public class Course {
     private boolean mandatory; // mandatory or elective
     private int ects;
     private String courseLanguage;
-    private int minimumNumberOfStudent; // per semester?
+    private int minimumNumberOfStudent;
     private int expectedNumberOfStudent;
-    private int maximumNumberOfStudent; // per semester?
+    private int maximumNumberOfStudent;
+    private int attendingStudents;
     private String prerequisites; // requirements for students, e.g. "Students must know HTML, CSS, JS, PHP and MySQL."
     private String learningOutcome;
     private String learningContent;
@@ -168,6 +169,25 @@ public class Course {
 
     public void setSemester(int semester) {
         this.semester = semester;
+    }
+
+    public int getAttendingStudents() {
+        return attendingStudents;
+    }
+
+    public void setAttendingStudents(int attendingStudents) {
+        this.attendingStudents = attendingStudents;
+    }
+
+    public int incrementAttendingStudents(int amount) {
+        // TODO: 07-Dec-17 Check for overflow 
+        attendingStudents += amount;
+        // Hope that maximum and minimum is set before attending :)
+        if (attendingStudents > maximumNumberOfStudent) {
+            attendingStudents -= amount;
+            throw new IllegalArgumentException("More than maximum students allowed: " + attendingStudents + amount);
+        }
+        return attendingStudents;
     }
 
     public boolean hasTeacher(Teacher teacher) {
